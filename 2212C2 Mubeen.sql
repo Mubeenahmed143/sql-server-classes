@@ -61,7 +61,7 @@ drop table course;
 -- table ke under ka records delete kr deta hai --
 truncate table students;
 
---chat gpt records with like operator
+--chat gpt records --
 
 -- Create a table
 CREATE TABLE Products (
@@ -108,10 +108,23 @@ VALUES
 
 	select * from Products;
 
+
 	alter table Products add Quantity int;
+
+	-- IN => multiple values  ko print krne ke lye --
+	select * from Products where Price in(399.99, 799.99);
+
+	-- between => range ke lye use hota hai --
+	select * from Products where Price between 200 AND 800;
+
+	-- order by => tarteeb (line wise) se print hota hai --
+	select * from Products where Price between 200 AND 800 order by Price;
 
 	--with relatinal operator " < , > , = , >= , <= , !=" AND logical operator "AND , OR , NOT "  --
 	select * from Products where ProductID >= 5 AND ProductID <= 10 ;
+
+	--with relatinal operator " < , > , = , >= , <= , !=" AND logical operator "AND , OR , NOT "  --
+	select * from Products where (ProductName = 'Bed' OR ProductName = 'Mouse') AND Category = 'Furniture' ;
 
 	--retrieve records whose name start with any alphabets and last sign %--
 	select * from Products where ProductName like 'd%' ;
