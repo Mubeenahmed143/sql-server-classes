@@ -5,11 +5,13 @@ use class;
 
 
 create table students(
-id int,
-name varchar(255),
-email varchar(255),
-pass varchar(255),
-gender varchar(255)
+id int not null unique identity,
+name varchar(255) not null,
+email varchar(255) not null,
+pass varchar(255) not null,
+gender varchar(255) not null,
+cid int not null,
+foreign key (cid) references course(cid)
 );
 
 
@@ -20,12 +22,12 @@ fname varchar(255) not null unique,
 city varchar(50) not null default'Karachi'
 );
 
-insert into students(name,email,pass,gender)values
-(1,'ahtesham','aht@gmail.com','123','male'),
-(2,'shahheer','shah@gmail.com','sha12','male'),
-(3,'saneha','saneha@gmail.com','saneha1','female'),
-(4,'areeqa','areeqa@gmail.com','areeqa','male'),
-(5,'hassan','hasu@gmail.com','hasu1','male')
+insert into students(name, email, pass, gender, cid )values
+('ahtesham','aht@gmail.com','123','male',2),
+('shahheer','shah@gmail.com','sha12','male',4),
+('saneha','saneha@gmail.com','saneha1','female',1),
+('areeqa','areeqa@gmail.com','areeqa','male',3),
+('hassan','hasu@gmail.com','hasu1','male',5)
 ;
 
 
@@ -39,8 +41,34 @@ insert into course(cname,fname)values
 ('css','owias')
 ;
 
+insert into course(cname,fname,city)values
+('asp.net','mubeen','multan');
+
 select * from course;
 select * from students;
+
+--JOINS START --
+
+-- INNER JOIN --
+select * from students inner join course on course.cid = students.cid ;
+
+-- INNER JOIN WITH ALISE NAME --
+select * from students as std inner join course as cors on cors.cid = std.cid ;
+
+-- INNER JOIN WITH SELECTED COLUMNS --
+select id , name , cname , fname from students as std inner join course as cors on cors.cid = std.cid ;
+
+-- RIGHT JOIN --
+select * from students right join course on course.cid = students.cid ;
+
+-- LEFT JOIN --
+select * from students left join course on course.cid = students.cid ;
+
+
+
+drop table students;
+drop table course;
+
 
 -- column ko add krne ke lye --
 alter table students add addreess int;
@@ -55,8 +83,6 @@ alter table students drop column addreess;
 EXEC sp_rename 'students.addreess' , 'address' , 'COLUMN';
 
 -- drop table ko delete krta hai -- 
-drop table students;
-drop table course;
 
 -- table ke under ka records delete kr deta hai --
 truncate table students;
@@ -148,3 +174,15 @@ VALUES
 
 	--DELETE COMMAND --
 	DELETE from Products where ProductID = '30';
+
+	-- Aggregate function (count, max, min, sum, avg) --
+
+	select count(Price) as Total_Price from Products;
+
+		select sum(Price) as Total_Sum from Products;
+
+			select min(Price) as Starting_Price from Products;
+
+				select max(Price) as Highest_Price from Products;
+
+					select avg(Price) as Avg_Price from Products;
