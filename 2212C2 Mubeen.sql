@@ -64,10 +64,52 @@ select * from students right join course on course.cid = students.cid ;
 -- LEFT JOIN --
 select * from students left join course on course.cid = students.cid ;
 
-
+--FULL JOIN --
+select * from students full join course on course.cid = students.cid;
 
 drop table students;
 drop table course;
+
+--SELF JOIN --
+-- Create the Employees table
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY,
+    Name NVARCHAR(50),
+    ManagerID INT,
+    FOREIGN KEY (ManagerID) REFERENCES Employees(EmployeeID)
+);
+
+-- Insert 20 records into the Employees table
+INSERT INTO Employees (EmployeeID, Name, ManagerID)
+VALUES 
+    (1, 'John Doe', NULL),  -- Assuming John Doe is the CEO (top-level employee)
+    (2, 'Jane Smith', 1),   -- Jane Smith reports to John Doe
+    (3, 'Michael Johnson', 1),  -- Michael Johnson also reports to John Doe
+    (4, 'Emily Davis', 2),  -- Emily Davis reports to Jane Smith
+    (5, 'David Brown', 2),  -- David Brown also reports to Jane Smith
+    (6, 'Sarah Lee', 3),    -- Sarah Lee reports to Michael Johnson
+    (7, 'Kevin Wilson', 3), -- Kevin Wilson also reports to Michael Johnson
+    (8, 'Lisa Taylor', 4),  -- Lisa Taylor reports to Emily Davis
+    (9, 'Robert Martinez', 5), -- Robert Martinez reports to David Brown
+    (10, 'Amanda Robinson', 5), -- Amanda Robinson also reports to David Brown
+    (11, 'Daniel Garcia', 6), -- Daniel Garcia reports to Sarah Lee
+    (12, 'Olivia Rodriguez', 6), -- Olivia Rodriguez also reports to Sarah Lee
+    (13, 'William Hernandez', 7), -- William Hernandez reports to Kevin Wilson
+    (14, 'Mia Lopez', 7), -- Mia Lopez also reports to Kevin Wilson
+    (15, 'Ethan Gonzalez', 8), -- Ethan Gonzalez reports to Lisa Taylor
+    (16, 'Chloe Perez', 8), -- Chloe Perez also reports to Lisa Taylor
+    (17, 'Alex Evans', 9), -- Alex Evans reports to Robert Martinez
+    (18, 'Sophia Turner', 9), -- Sophia Turner also reports to Robert Martinez
+    (19, 'Matthew Collins', 10), -- Matthew Collins reports to Amanda Robinson
+    (20, 'Isabella Stewart', 10); -- Isabella Stewart also reports to Amanda Robinson
+
+-- Verify the records inserted
+SELECT * FROM Employees;
+
+select * from Employees as T1 inner join Employees as T2 on T1.EmployeeID = T2.ManagerID;
+
+select T1.EmployeeID as ID, T1.Name as Leader , T2.Name as Worker from Employees as T1 inner join Employees as T2 on T1.EmployeeID = T2.ManagerID;
+
 
 
 -- column ko add krne ke lye --
