@@ -218,13 +218,17 @@ VALUES
 	DELETE from Products where ProductID = '30';
 
 	-- Aggregate function (count, max, min, sum, avg) --
-
+	-- => count --
 	select count(Price) as Total_Price from Products;
 
+	-- => sum --
 		select sum(Price) as Total_Sum from Products;
 
+		-- => min --
 			select min(Price) as Starting_Price from Products;
 
+			-- => max --
 				select max(Price) as Highest_Price from Products;
 
+				-- => avg --
 					select avg(Price) as Avg_Price from Products;
