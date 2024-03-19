@@ -71,7 +71,9 @@ drop table students;
 drop table course;
 
 --SELF JOIN --
+
 -- Create the Employees table
+
 CREATE TABLE Employees (
     EmployeeID INT PRIMARY KEY,
     Name NVARCHAR(50),
@@ -80,6 +82,7 @@ CREATE TABLE Employees (
 );
 
 -- Insert 20 records into the Employees table
+
 INSERT INTO Employees (EmployeeID, Name, ManagerID)
 VALUES 
     (1, 'John Doe', NULL),  -- Assuming John Doe is the CEO (top-level employee)
@@ -104,6 +107,8 @@ VALUES
     (20, 'Isabella Stewart', 10); -- Isabella Stewart also reports to Amanda Robinson
 
 -- Verify the records inserted
+
+-- self join command --
 SELECT * FROM Employees;
 
 select * from Employees as T1 inner join Employees as T2 on T1.EmployeeID = T2.ManagerID;
@@ -140,6 +145,7 @@ CREATE TABLE Products (
 );
 
 -- Insert 30 records of data
+
 INSERT INTO Products (ProductID, ProductName, Category, Price)
 VALUES 
     (1, 'Keyboard', 'Electronics', 29.99),
