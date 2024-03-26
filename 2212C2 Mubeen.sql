@@ -238,3 +238,28 @@ VALUES
 
 				-- => avg --
 					select avg(Price) as Avg_Price from Products;
+
+         select sum(Price) as Total_Price from Products where Category = 'Appliances';
+
+					-- group by clause with aggregate function --
+				select sum(Price) as Total_Price from Products  group by Category;
+
+					select sum(Price) as Total_Price from Products where Category = 'Furniture' group by Category;
+
+				select sum(Price) as Total_Price , Category from Products group by Category;
+
+					select max(Price) as Highest_Price , Category from Products group by Category;
+
+				select min(Price) as Lowest_Price , Category from Products group by Category;
+
+					select avg(Price) as Average_Price , Category from Products group by Category;
+
+					-- GROUP BY CLAUSE WITH HAVING CLAUSE AND WHERE CLAUSE --
+		select ProductName,max(Price) as Highest_Price, Category from Products where Category = 'Electronics' group by ProductName, Category, Price having Price > 200 ;
+
+		                    --HAVING CLAUSE WITH ORDER BY CLAUSE --
+				select ProductName,min(Price) as Highest_Price, Category from Products  group by ProductName, Category, Price having Price < 500 order by Price asc ;
+
+		select ProductName,min(Price) as Highest_Price, Category from Products  group by ProductName, Category, Price having Price < 500 order by Price desc ;
+
+				select ProductName,min(Price) as Highest_Price, Category from Products  group by ProductName, Category, Price having Price < 500 order by Category asc ;
