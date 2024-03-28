@@ -271,3 +271,8 @@ VALUES
 
 				-- subquery with (in) operator --
 				select ProductName , Price from Products where Price in (select Price from Products where Price >=500) order by Price asc;
+
+				select ProductName, Price, Category from Products where ProductID  in (select ProductID from Products where Category = 'Electronics');
+
+				-- IN => In multiple rows ke lye use hota hai --
+				-- (=) => = single row print krta hai   --
