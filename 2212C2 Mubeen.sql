@@ -262,4 +262,12 @@ VALUES
 
 		select ProductName,min(Price) as Highest_Price, Category from Products  group by ProductName, Category, Price having Price < 500 order by Price desc ;
 
-				select ProductName,min(Price) as Highest_Price, Category from Products  group by ProductName, Category, Price having Price < 500 order by Category asc ;
+				select Category,mAX(Price) as Highest_Price from Products  group by Category, Price having Price < 500 order by Category asc ;
+
+				-- SUBQUERY --
+				select * from Products where Price = (SELECT max(Price) from Products); 
+				--check--
+				select max(Price) from Products;
+
+				-- subquery with (in) operator --
+				select ProductName , Price from Products where Price in (select Price from Products where Price >=500) order by Price asc;
