@@ -276,3 +276,19 @@ VALUES
 
 				-- IN => In multiple rows ke lye use hota hai --
 				-- (=) => = single row print krta hai   --
+
+				--create login ID for user--
+				create login zaid with password = 'zaid';
+
+				create user zaid for login zaid;
+				go
+
+				select * from Products;
+
+				--grant acess deta hai (Permission)--
+				grant select on Products to mubeen;
+
+				grant update on Products to mubeen;
+
+				--revoke acess wapas leta hai (grant opposite)--
+				revoke update on Products from mubeen;
