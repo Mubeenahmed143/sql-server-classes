@@ -292,3 +292,47 @@ VALUES
 
 				--revoke acess wapas leta hai (grant opposite)--
 				revoke update on Products from mubeen;
+
+				--Functions (block of code ko reuse krne ke lye)--
+
+				--Scaler Function
+				create function StudentName ()
+				returns varchar(255)
+				begin 
+				return 'mubeen ahmed' ;
+				end
+
+				select dbo.StudentName() as Student
+
+				--second example --
+				create function Price()
+				returns int
+				begin 
+				return 290.00
+				end
+
+				select dbo.Price() as FixedPrice
+
+				--parameterize functions--
+				create function addition(@num1 int , @num2 int)
+				returns int 
+				begin 
+				return @num1 + @num2 ;
+				end
+				select dbo.addition(3,5);
+
+				--second example with alter --
+				alter function sub(@num1 int , @num2 int )
+				returns int
+				begin 
+				return @num1 * @num2 ;
+				end
+				select dbo.sub(5,4) as subtraction;
+
+				--third example--
+				create function emp(@name1 varchar(255) , @name2 varchar(255) )
+				returns varchar(255)
+				begin 
+				return @name1 + @name2 ;
+				end
+				select dbo.emp('sheikh ',' sahab') as Employee;
