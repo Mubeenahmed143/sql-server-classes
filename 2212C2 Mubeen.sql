@@ -336,3 +336,16 @@ VALUES
 				return @name1 + @name2 ;
 				end
 				select dbo.emp('sheikh ',' sahab') as Employee;
+
+				create proc sheikh
+
+				as
+				begin
+
+				UPDATE Products SET ProductName = 'LED' WHERE ProductID = '3';
+				select * from Products
+
+				end
+				go
+
+				 drop proc sheikh 
