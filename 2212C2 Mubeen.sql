@@ -337,15 +337,101 @@ VALUES
 				end
 				select dbo.emp('sheikh ',' sahab') as Employee;
 
-				create proc sheikh
+				create proc tab
 
 				as
 				begin
 
-				UPDATE Products SET ProductName = 'LED' WHERE ProductID = '3';
+			select * from course;
+select * from students;
+SELECT * FROM Employees;
 				select * from Products
 
 				end
 				go
 
-				 drop proc sheikh 
+				 exec tab;
+
+				 --stored procedure output parameter--
+				  create proc sp_data
+				  @name NVARCHAR(100)
+				  as
+				  begin
+
+				  select * from Products where ProductName=@name
+
+				  end 
+				  go
+
+				  exec sp_data 'Laptop'
+				  --e.g--
+				alter proc sp_mydata
+				  @abc NVARCHAR(50)
+				  as
+				  begin
+
+				  select * from Products where Category=@abc
+
+				  end 
+				  go
+
+				  exec sp_mydata 'Electronics';
+
+				 --stored procedure output parameter with like --
+				  	 create proc wild_cards
+				  @abc NVARCHAR(50)
+				  as
+				  begin
+
+				  select * from Products where Category like @abc
+
+				  end 
+				  go
+
+				  exec wild_cards 'h%'
+
+				  --insert--
+				 create procedure sp_productinsert
+				 (
+				 @ProductID INT ,
+                 @ProductName NVARCHAR(100),
+                 @Category NVARCHAR(50),
+                 @Price DECIMAL(10, 2)
+				
+				 )
+				 as 
+				 begin 
+				 insert into Products values(@ProductID, @ProductName, @Category, @Price)
+				 end 
+				 go
+
+				 exec sp_productinsert '31','Pen','Stationary','200' ;
+
+				 --update--
+				 alter proc sp_proupdate
+				 @ProductID INT,
+				 @ProductName NVARCHAR(100)
+				 as 
+				 begin
+
+				UPDATE Products SET ProductName =@ProductName WHERE ProductID =@ProductID
+
+				end
+				go
+
+
+				exec sp_proupdate '31' , 'INK PEN'
+
+				--DELETE--
+				 create proc sp_prodelete
+				 @ProductID INT
+				
+				 as 
+				 begin
+
+				DELETE from Products where ProductID =@ProductID
+
+				end
+				go
+
+				exec sp_prodelete 31
