@@ -337,6 +337,7 @@ VALUES
 				end
 				select dbo.emp('sheikh ',' sahab') as Employee;
 
+				--stored procedure--
 				create proc tab
 
 				as
@@ -346,7 +347,7 @@ VALUES
 select * from students;
 SELECT * FROM Employees;
 				select * from Products
-
+				
 				end
 				go
 
@@ -434,4 +435,35 @@ SELECT * FROM Employees;
 				end
 				go
 
-				exec sp_prodelete 31
+				exec sp_prodelete 31;
+
+				--view-- 
+
+				CREATE TABLE Users (
+    UserID INT PRIMARY KEY ,
+    Username NVARCHAR(50) null,
+    Email NVARCHAR(100)  null
+);
+
+INSERT INTO Users (UserID, Username, Email)
+VALUES
+    (1, 'JohnDoe', 'john.doe@example.com'),
+    (2, 'JaneSmith', 'jane.smith@example.com'),
+    (3, 'AliceJohnson', 'alice.johnson@example.com');
+
+	SELECT * FROM Users;
+
+
+	--select view--
+				create view user_view 
+				as
+				SELECT * FROM Users
+         
+		 --insert view--
+			  insert into user_view values (4 , 'Zaid' , 'zaidi@gmail.com')
+			  
+			  --update view--
+			  update user_view set Username = 'Murtaza'  where UserID = 3 
+
+			  --delete view--
+			  delete from user_view where UserID=2
