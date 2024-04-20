@@ -467,3 +467,32 @@ VALUES
 
 			  --delete view--
 			  delete from user_view where UserID=2
+
+			  --create view with using joins --
+			  create table Orders(
+			  O_ID int primary key,
+			  Order_Details nvarchar(50),
+			  product_id int references Products(ProductID)
+			  );
+			  DROP TABLE Orders;
+
+			  insert into Orders (O_ID,Order_Details,product_id) values(1,'delivered',4)
+              insert into Orders values(2,'pending',2)
+               insert into Orders values(3,'limited stock',1)
+               insert into Orders values(4,'pending',5)
+              insert into Orders values(6,'rejected',11);
+
+			  select * from Orders;
+
+			  create view Order_Detail
+			  as
+			  select ProductID,ProductName,Category, Order_Details
+             from Products inner join Orders
+           on Products.ProductID=Orders.product_id;
+
+		   --select --
+		   select * from Order_Details
+            order by ProductID;
+
+			--insert (does not inserting only checking)--
+			insert into Order_Detail values (8 , 'face wash','limited');
