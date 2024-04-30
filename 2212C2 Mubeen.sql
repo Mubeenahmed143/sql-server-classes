@@ -508,20 +508,20 @@ VALUES
 			Emp_Country varchar(100)
 			);
 
-			insert into EmployeeInfo values (105 , 'Hanif' , 'Dubai');
-			delete from EmployeeInfo where Emp_ID = 105;
-			update EmployeeInfo Set Emp_Country = 'Bangkok' where Emp_ID = 103;
+			insert into EmployeeInfo values (107 , 'hassanbawla' , 'Dubai');
+
+			delete from EmployeeInfo where Emp_ID = 104; 
+
+			update EmployeeInfo Set Emp_Country = 'Ireland' where Emp_ID = 104;
 
 			select * from EmployeeInfo;
-			select * from Emp_Audit;
+			select * from Employee_Audit;
 
-			create table Emp1_Audit 
+			create table Employee_Audit 
 			(
 			emp_id int,
 			emp_name varchar(200),
 			emp_country varchar(100),
-			old_name varchar(100),
-			old_country varchar(100),
 
 			Audit_Action varchar(100),
 			Action_Date Date
@@ -540,11 +540,11 @@ VALUES
 
 			  select @E_ID = Emp_ID from inserted
 			   select @E_Name = Emp_Name from inserted
-			    select @E_Country = Emp_Country from inserted
+			   select @E_Country = Emp_Country from inserted
 
 				Set @Audit = 'Insert Action'
 
-				insert into Emp1_Audit (emp_id,emp_name,emp_country,Audit_Action,Action_Date)
+				insert into Employee_Audit (emp_id,emp_name,emp_country,Audit_Action,Action_Date)
 				values (@E_ID,@E_Name,@E_Country,@Audit,getdate())
 
 				End
@@ -566,7 +566,7 @@ VALUES
 
 				Set @Audit = 'Delete Action'
 
-				insert into Emp1_Audit (emp_id,emp_name,emp_country,Audit_Action,Action_Date)
+				insert into Employee_Audit (emp_id,emp_name,emp_country,Audit_Action,Action_Date)
 				values (@E_ID,@E_Name,@E_Country,@Audit,getdate())
 
 				End
@@ -591,12 +591,93 @@ VALUES
 			    select @E_Country = Emp_Country from inserted
 				select @E_C=Emp_Country from deleted
 
-					insert into Emp1_Audit (emp_id,emp_name,
-					old_name,emp_country,old_country,Audit_Action,Action_Date)
-				values (@E_ID,@E_Name,@E_N,@E_Country,@E_C,@Audit,getdate())
+					insert into Employee_Audit (emp_id,emp_name,emp_country,Audit_Action,Action_Date)
+				values (@E_ID,' Update' + @E_Name+ ' Old' + @E_N,' Update' +@E_Country + 'Old' + @E_C,@Audit,getdate())
 				end
 
+	-----------------------------------------INSTEAD OF TRIGGERS-------------------------------------------------
 
+
+				      ----------------------------Insert---------------------------
+		create Trigger insert_trigger
+		ON EmployeeInfo
+		INSTEAD OF INSERT
+		AS 
+
+			Begin 
+
+			          Declare @E_ID int
+			          Declare @E_Name varchar(200)
+			          Declare @E_Country varchar(100)
+			          Declare @E_Audit varchar(200)
+
+			          select @E_ID = Emp_ID from inserted
+			          select @E_Name = Emp_Name from inserted
+			          select @E_Country = Emp_Country from inserted
+			
+			          Set @E_Audit = 'Insert Action' 
+
+				      insert into Employee_Audit (emp_id, emp_name, emp_country, Audit_Action, Action_Date)
+				      values (@E_ID, @E_Name, @E_Country, @E_Audit, getdate())
+
+		     End
+
+
+			 	 ----------------------------Delete---------------------------
+		create Trigger delete_trigger
+		ON EmployeeInfo
+		INSTEAD OF DELETE
+		AS 
+
+			Begin 
+
+			          Declare @E_ID int
+			          Declare @E_Name varchar(200)
+			          Declare @E_Country varchar(100)
+			          Declare @E_Audit varchar(200)
+
+			          select @E_ID = Emp_ID from deleted
+			          select @E_Name = Emp_Name from deleted
+			          select @E_Country = Emp_Country from deleted
+			
+			          Set @E_Audit = 'Delete Action' 
+
+				      insert into Employee_Audit (emp_id, emp_name, emp_country, Audit_Action, Action_Date)
+				      values (@E_ID, @E_Name, @E_Country, @E_Audit, getdate())
+
+		     End
+
+			 	 ----------------------------Update---------------------------
+		create Trigger update_trigger
+		ON EmployeeInfo
+		INSTEAD OF UPDATE
+		AS 
+
+			Begin 
+
+			           Declare @E_ID int
+			           Declare @Audit varchar(100)
+			           Declare @E_Name varchar(200)
+			           Declare @E_N varchar(200)
+			           Declare @E_Country varchar(100)
+			           Declare @E_C varchar(100)
+
+			          
+					  select @E_ID = Emp_ID from inserted 
+
+				      Set @Audit = 'Update Action'
+
+			          select @E_Name = Emp_Name from inserted
+			          select @E_N=Emp_Name from deleted
+			          select @E_Country = Emp_Country from inserted
+				      select @E_C=Emp_Country from deleted
+
+				      insert into Employee_Audit (emp_id,emp_name,emp_country,Audit_Action,Action_Date)
+				      values (@E_ID,' Update' + @E_Name+ ' Old' + @E_N,' Update' +@E_Country + 'Old' + @E_C,@Audit,getdate())
+
+		     End			 
+
+			
 
 
 
