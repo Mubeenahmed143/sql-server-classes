@@ -675,10 +675,91 @@ VALUES
 				      insert into Employee_Audit (emp_id,emp_name,emp_country,Audit_Action,Action_Date)
 				      values (@E_ID,' Update' + @E_Name+ ' Old' + @E_N,' Update' +@E_Country + 'Old' + @E_C,@Audit,getdate())
 
-		     End			 
+		     End		
+	
 
-			
+--------------------------------------------------------Transaction-----------------------------------------------------------------
 
+create table Bankacc
+(
+Acc_ID int primary key,
+Acc_Holder varchar(255),
+Amount int
+);			
 
+INSERT INTO Bankacc (Acc_ID, Acc_Holder, Amount)
+VALUES
+    (1, 'John Doe', 1000),
+    (2, 'Jane Smith', 1500),
+    (3, 'Michael Johnson', 2000),
+    (4, 'Emily Davis', 1200),
+    (5, 'Christopher Brown', 1800),
+    (6, 'Jessica Wilson', 1300),
+    (7, 'Daniel Taylor', 1700),
+    (8, 'Sarah Martinez', 1900),
+    (9, 'David Anderson', 1100),
+    (10, 'Ashley Thomas', 1600);
+
+	select * from Bankacc;
+
+create procedure DepositTrans
+(
+    @id int,
+	@amount int
+	)
+AS
+BEGIN 
+      BEGIN TRAN DT1
+	         declare @num int 
+			 select @num = count(*) from Bankacc where Acc_ID = @id
+IF(@num = 0)
+            BEGIN
+			print 'Record does not exist.......'
+			ROLLBACK TRAN DT1
+			END
+ELSE 
+            BEGIN
+			update Bankacc set Amount = Amount + @amount where Acc_ID = @id
+			print 'Amount Deposited Successfully...'
+			COMMIT TRAN DT1
+			END
+	    END
+		
+-----------------WITHDRAW AMOUNT------------------------------
+create procedure WithdrawTrans
+(
+    @id int,
+	@amount int
+	)
+AS
+BEGIN 
+      BEGIN TRAN DT1
+	         declare @num int 
+			 select @num = count(*) from Bankacc where Acc_ID = @id
+IF(@num = 0)
+            BEGIN
+			print 'Record does not exist.......'
+			ROLLBACK TRAN DT1
+			END
+ELSE 
+         BEGIN
+			declare @currentBalance int
+			select @currentBalance = Amount from Bankacc where  Acc_ID = @id
+IF(@currentBalance < @amount)
+            BEGIN
+			print 'Your Current Balance is less than your desired withdrawal Amount...'
+			ROLLBACK TRAN DT1
+	 		END
+         END 
+IF (@amount <= @currentBalance)
+         BEGIN
+		 update Bankacc set Amount = Amount - @amount where Acc_ID = @id
+		 print 'Amount Withdrawl Successfully...'
+		 COMMIT TRAN DT1
+		 END
+    END
+
+	EXEC DepositTrans 2,25000;
+    EXEC WithdrawTrans 7,700;
 
 
