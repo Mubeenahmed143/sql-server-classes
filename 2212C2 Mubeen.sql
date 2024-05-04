@@ -710,18 +710,18 @@ create procedure DepositTrans
 AS
 BEGIN 
       BEGIN TRAN DT1
-	         declare @num int 
-			 select @num = count(*) from Bankacc where Acc_ID = @id
+	              declare @num int 
+			      select @num = count(*) from Bankacc where Acc_ID = @id
 IF(@num = 0)
             BEGIN
-			print 'Record does not exist.......'
-			ROLLBACK TRAN DT1
+			      print 'Record does not exist.......'
+			      ROLLBACK TRAN DT1
 			END
 ELSE 
             BEGIN
-			update Bankacc set Amount = Amount + @amount where Acc_ID = @id
-			print 'Amount Deposited Successfully...'
-			COMMIT TRAN DT1
+			     update Bankacc set Amount = Amount + @amount where Acc_ID = @id
+			     print 'Amount Deposited Successfully...'
+			     COMMIT TRAN DT1
 			END
 	    END
 		
@@ -734,28 +734,28 @@ create procedure WithdrawTrans
 AS
 BEGIN 
       BEGIN TRAN DT1
-	         declare @num int 
-			 select @num = count(*) from Bankacc where Acc_ID = @id
+	               declare @num int 
+			       select @num = count(*) from Bankacc where Acc_ID = @id
 IF(@num = 0)
             BEGIN
-			print 'Record does not exist.......'
-			ROLLBACK TRAN DT1
+			     print 'Record does not exist.......'
+			     ROLLBACK TRAN DT1
 			END
 ELSE 
          BEGIN
-			declare @currentBalance int
-			select @currentBalance = Amount from Bankacc where  Acc_ID = @id
+			  declare @currentBalance int
+			  select @currentBalance = Amount from Bankacc where  Acc_ID = @id
 IF(@currentBalance < @amount)
             BEGIN
-			print 'Your Current Balance is less than your desired withdrawal Amount...'
-			ROLLBACK TRAN DT1
+			     print 'Your Current Balance is less than your desired withdrawal Amount...'
+			     ROLLBACK TRAN DT1
 	 		END
          END 
 IF (@amount <= @currentBalance)
          BEGIN
-		 update Bankacc set Amount = Amount - @amount where Acc_ID = @id
-		 print 'Amount Withdrawl Successfully...'
-		 COMMIT TRAN DT1
+		      update Bankacc set Amount = Amount - @amount where Acc_ID = @id
+		      print 'Amount Withdrawl Successfully...'
+		      COMMIT TRAN DT1
 		 END
     END
 
