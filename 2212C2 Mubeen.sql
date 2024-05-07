@@ -680,6 +680,7 @@ VALUES
 
 --------------------------------------------------------Transaction-----------------------------------------------------------------
 
+---------------------------------------DEPOSIT AMOUNT----------------------------------------------
 create table Bankacc
 (
 Acc_ID int primary key,
@@ -762,4 +763,79 @@ IF (@amount <= @currentBalance)
 	EXEC DepositTrans 2,25000;
     EXEC WithdrawTrans 7,700;
 
+	---------------------------------------------------Sender,Reciever Transaction---------------------------------------------------------
+create procedure SR_Trans
+(
+  @Source_ID int,
+  @Source_Amount int,
+  @Dest_ID int
+)
+AS
+BEGIN
+     BEGIN TRAN T1
+	        declare @num1 int , @num2 int
+			select @num1 = count(*) from Bankacc where Acc_ID = @Source_ID
+			select @num2 = count(*) from Bankacc where Acc_ID = @Dest_ID
+	   IF(@num1 = 0 )
+	   BEGIN
+	        print 'Amount can not be transfered because Sender does not exist...'
+	   END
+	   ELSE IF(@num2 = 0 )
+	   BEGIN
+	        print 'Amount can not be transfered because Receiver does not exist...'
+	   END
+	   ELSE 
+	   BEGIN
+	        declare @currentBalance int
+			select @currentBalance = Amount from Bankacc where Acc_ID = @Source_ID
 
+	    IF (@currentBalance < @Source_Amount)
+		BEGIN
+		     print 'Transfer Amount EXCEEDS the Current Balance in your Amount...'
+			 ROLLBACK TRAN T1
+		END
+	   END
+	    IF(@Source_Amount <= @currentBalance)
+		BEGIN
+		     update Bankacc set Amount = Amount - @Source_Amount where Acc_ID = @Source_ID
+		     update Bankacc set Amount = Amount + @Source_Amount where Acc_ID = @Dest_ID
+			 print 'Amount Transfered Successfully...THANK YOU!'
+			 declare @newBalance_S int , @newBalance_D int 
+			 select @newBalance_S = Amount from Bankacc where  Acc_ID = @Source_ID
+			 select @newBalance_D = Amount from Bankacc where  Acc_ID = @Dest_ID
+			 print 'Dear Sender, Your Current Balance is now ' + cast(@newBalance_S as varchar)
+			 print 'Dear Reciever, Your Current Balance is now ' + cast(@newBalance_D as varchar)
+
+			 COMMIT TRAN T1
+
+		END
+
+	 END
+
+	 ---------------------------------- CLASS TASK--------------------------------- 
+	 alter procedure CheckTrans
+(
+    @id int,
+	@amount int
+	)
+AS
+BEGIN 
+      BEGIN TRAN DT1
+	              declare @num int 
+			      select @num = count(*) from Bankacc where Acc_ID = @id
+IF(@num = 0)
+            BEGIN
+			      print 'Record does not exist.......'
+			      ROLLBACK TRAN DT1
+			END
+			BEGIN
+	        declare @currentBalance int
+			select @currentBalance = Amount from Bankacc where Acc_ID = @id
+
+	    IF (@amount = @currentBalance )
+		BEGIN
+		     print 'Your Account Balance is ' + cast(@currentBalance as varchar)
+			 COMMIT TRAN DT1
+		END
+	   END
+	   END
