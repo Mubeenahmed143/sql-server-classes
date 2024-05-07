@@ -839,3 +839,31 @@ IF(@num = 0)
 		END
 	   END
 	   END
+
+
+	   -----another--------
+	   CREATE PROCEDURE BalanceInquiry
+(
+    @AccID INT
+)
+AS
+BEGIN
+    DECLARE @Balance INT
+
+    -- Check if the account exists
+    IF EXISTS (SELECT 1 FROM Bankacc WHERE Acc_ID = @AccID)
+    BEGIN
+        -- Retrieve the account balance
+        SELECT @Balance = Amount FROM Bankacc WHERE Acc_ID = @AccID
+
+        -- Print the account balance
+        PRINT 'Your Account Balance is: ' + CAST(@Balance AS VARCHAR)
+    END
+    ELSE
+    BEGIN
+        -- Print message if the account doesn't exist
+        PRINT 'Account not found'
+    END
+END
+
+EXEC BalanceInquiry 8
