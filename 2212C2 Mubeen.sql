@@ -812,58 +812,34 @@ BEGIN
 
 	 END
 
-	 ---------------------------------- CLASS TASK--------------------------------- 
-	 alter procedure CheckTrans
+
+	 ---------------------------------- CLASS TASK [Check Account Balance]--------------------------------- 
+	 ALTER procedure Check_Balance
 (
-    @id int,
-	@amount int
+    @id int
 	)
 AS
 BEGIN 
       BEGIN TRAN DT1
-	              declare @num int 
-			      select @num = count(*) from Bankacc where Acc_ID = @id
-IF(@num = 0)
-            BEGIN
-			      print 'Record does not exist.......'
-			      ROLLBACK TRAN DT1
-			END
-			BEGIN
+	              DECLARE @Balance INT
+			    select @Balance = count(*) from Bankacc where Acc_ID = @id
+ IF(@Balance = 0 )
+	   BEGIN
+	        print 'Your Account does not Exists...'
+				 ROLLBACK TRAN DT1
+	   END
+	    ELSE 
+	   BEGIN
 	        declare @currentBalance int
 			select @currentBalance = Amount from Bankacc where Acc_ID = @id
+			   PRINT 'Your Account Balance is: ' + CAST(@CurrentBalance AS VARCHAR) + '...'
+			   COMMIT TRAN DT1
+	    END
+	END
+	
+	EXEC Check_Balance 1;
 
-	    IF (@amount = @currentBalance )
-		BEGIN
-		     print 'Your Account Balance is ' + cast(@currentBalance as varchar)
-			 COMMIT TRAN DT1
-		END
-	   END
-	   END
+--------------------------------------INDEXES------------------------------------------------
 
 
-	   -----another--------
-	   CREATE PROCEDURE BalanceInquiry
-(
-    @AccID INT
-)
-AS
-BEGIN
-    DECLARE @Balance INT
-
-    -- Check if the account exists
-    IF EXISTS (SELECT 1 FROM Bankacc WHERE Acc_ID = @AccID)
-    BEGIN
-        -- Retrieve the account balance
-        SELECT @Balance = Amount FROM Bankacc WHERE Acc_ID = @AccID
-
-        -- Print the account balance
-        PRINT 'Your Account Balance is: ' + CAST(@Balance AS VARCHAR)
-    END
-    ELSE
-    BEGIN
-        -- Print message if the account doesn't exist
-        PRINT 'Account not found'
-    END
-END
-
-EXEC BalanceInquiry 8
+EXEC sys.sp_helpindex @objname = N'Employees';
